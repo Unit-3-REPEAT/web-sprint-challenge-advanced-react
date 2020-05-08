@@ -24,7 +24,7 @@ const CheckoutForm = (props) => {
   // };
 
   //CUSTOM HOOK HERE
-  const [values,handleChanges, showSuccessMessage, setShowSuccessMessage] = useForm();
+  const [values, handleChanges, showSuccessMessage, setShowSuccessMessage] = useForm();
 
 
   //THIS STAYS LOCAL
