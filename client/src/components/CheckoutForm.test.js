@@ -40,7 +40,7 @@ test("form shows success message on submit with form details", () => {
 
 });
 
-// //this test was unfortunate :(
+//this test was unfortunate :(
 // test('Check if sucess message was rendered successfully', () => {
 //     const {getByTestId, getByText} = render(<CheckoutForm />);
 //     const successMessage = getByTestId("successMessage");

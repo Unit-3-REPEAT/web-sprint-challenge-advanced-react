@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import SearchForm from '../components/SearchForm';
 
 export default class PlantList extends Component {
   // add state with a property called "plants" - initialize as an empty array
@@ -7,8 +8,10 @@ export default class PlantList extends Component {
   constructor(){
     super();
     this.state = {
-      plants:[]
+      plants:[],
+      searchPlants:''
     }
+    
   }
 
   // when the component mounts:
@@ -25,15 +28,34 @@ export default class PlantList extends Component {
     .then(response => {
       // console.log(response.data.plantsData)
       this.setState({plants: response.data.plantsData})
+      console.log(this.state.plants)
     })
     .catch(err => console.log(`There was an error fetching plants`, err))
   }
 
+  //Handle search plant input changes
+  handleChanges = e => {
+    this.setState({searchPlants: e.target.value})
+  }
+
+  
+  //Search specific plant
+  searchSpecificPlant = () => {
+      this.state.plants.filter((a) => {
+        return a.name.includes(this.state.searchPlants)
+      }) 
+  }
+
+ 
+
   /*********  DON'T CHANGE ANYTHING IN THE RENDER FUNCTION *********/
   render() {
-    return (
-      <main className="plant-list">
-        {this.state?.plants?.map((plant) => (
+    return ( 
+        
+        <main className="plant-list">  
+        {this.state?.plants?.map((plant) => (   
+                 
+         
           <div className="plant-card" key={plant.id}>
             <img className="plant-image" src={plant.img} alt={plant.name} />
             <div className="plant-details">
@@ -50,11 +72,19 @@ export default class PlantList extends Component {
                 onClick={() => this.props.addToCart(plant)}
               >
                 Add to cart
-              </button>
+              </button>              
             </div>
           </div>
         ))}
+
+          <SearchForm
+            plants={this.state.plants}
+            searchPlant={this.state.searchPlants}
+            handleChanges={this.handleChanges}
+            searchSpecificPlant={this.searchSpecificPlant}
+           />
       </main>
+      
     );
   }
 }
