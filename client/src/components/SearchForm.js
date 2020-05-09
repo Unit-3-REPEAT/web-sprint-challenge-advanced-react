@@ -1,13 +1,15 @@
 import React from 'react';
 
 
-export default class SearchForm extends React.Component {   
-    
+export default class SearchForm extends React.Component {    
 
-     render() {
-        // console.log(`this is props inside Searchform`, this.props)
+   
+
+     
+    render() {
+         console.log(`this is props inside Searchform -->`,this.props)
         return (
-            <form onSubmit={this.props.searchSpecificPlant}>
+            <form>
                 <input
                     placeholder="Search plants here ..." 
                     type="text"

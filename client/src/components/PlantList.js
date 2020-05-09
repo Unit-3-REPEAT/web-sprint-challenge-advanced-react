@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import SearchForm from '../components/SearchForm';
 
+
 export default class PlantList extends Component {
   // add state with a property called "plants" - initialize as an empty array
 
@@ -9,7 +10,8 @@ export default class PlantList extends Component {
     super();
     this.state = {
       plants:[],
-      searchPlants:''
+      filteredPlants:[],
+      searchPlant:''
     }
     
   }
@@ -22,29 +24,43 @@ export default class PlantList extends Component {
     this.getPlants();
   }
 
+  componentDidUpdate(previousProps, previousState){
+    if(previousState.searchPlant !== this.state.searchPlant){
+      // console.log(`input change`);   
+      let filteredPlants = this.state.plants.filter((plant) => {
+        // console.log(plant)
+        // var str = "Hello world, welcome to the universe.";
+        // var n = str.includes("world");
+        if (plant.name.toLowerCase().includes(this.state.searchPlant.toLowerCase())){
+          return plant
+        }
+        
+      })
+        this.setState({filteredPlants: filteredPlants})
+    }
+  }
+
   getPlants = () => {
     axios
     .get('http://localhost:3333/plants')
     .then(response => {
       // console.log(response.data.plantsData)
-      this.setState({plants: response.data.plantsData})
-      console.log(this.state.plants)
+      this.setState({plants: response.data.plantsData, filteredPlants: response.data.plantsData})
+      
+      
     })
-    .catch(err => console.log(`There was an error fetching plants`, err))
-  }
+    .catch(err => console.log(`There was an error fetching plants`, err))  }
 
-  //Handle search plant input changes
-  handleChanges = e => {
-    this.setState({searchPlants: e.target.value})
-  }
 
-  
-  //Search specific plant
-  searchSpecificPlant = () => {
-      this.state.plants.filter((a) => {
-        return a.name.includes(this.state.searchPlants)
-      }) 
-  }
+    //Handle search plant input changes
+    handleChanges = event => { 
+      //Set the local state first    
+     this.setState({searchPlant: event.target.value})   
+     
+   }
+         
+      
+      
 
  
 
@@ -52,8 +68,15 @@ export default class PlantList extends Component {
   render() {
     return ( 
         
-        <main className="plant-list">  
-        {this.state?.plants?.map((plant) => (   
+        <>
+         <SearchForm        
+            handleChanges={this.handleChanges}            
+        />
+           <br/>
+
+        <main className="plant-list">   
+                 
+        {this.state?.filteredPlants?.map((plant) => (   
                  
          
           <div className="plant-card" key={plant.id}>
@@ -76,15 +99,9 @@ export default class PlantList extends Component {
             </div>
           </div>
         ))}
-
-          <SearchForm
-            plants={this.state.plants}
-            searchPlant={this.state.searchPlants}
-            handleChanges={this.handleChanges}
-            searchSpecificPlant={this.searchSpecificPlant}
-           />
+         
       </main>
-      
+      </>
     );
   }
 }
